@@ -1,0 +1,50 @@
+Log regression iwth char and n-grams - bojan - 0.9792
+
+Pooled gru + fast text 0.983
+
+LSTM Linear avg and max - 0.9828
+
+pooled gru glove trainable - 0.9824
+
+pooled gru glove preprocess - 0.9823
+
+tfdif 3layer MLP Mercari - 0.9774
+
+NB-SVM Jeremy Howard - 0.977
+
+CNN - Glove - Sergei - 0.977
+
+attention with fasttext and textacy - sang han - 0.
+
+
+
+VERIFIED:::
+
+biggrucnn.py, glove.840b, 0.9839
+biggrucnn.py, numberbatch_ml, ??
+biggrucnnmorefeats.py,  xxxx, ??
+biggrucnnbigbatch.py,  xxxx, ??
+
+biggrucnntrainable.py, xxxxx, ??
+biggrucnntrainprep.py, xxxx, ??
+
+
+
+
+Feature Engineering - Eike
+
+Markov - me!
+
+Simple extedning - Pavel
+
+Deceive Perspective - zeeshan
+
+Words Polarity - SM
+
+
+
+
+
+
+
+
