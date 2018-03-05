@@ -60,8 +60,8 @@ train = pd.read_csv("../input/train.csv")
 test = pd.read_csv("../input/test.csv")
 
 # embedding_path = "../input/fasttext-crawl-300d-2m/crawl-300d-2M.vec"
-# embedding_path = "../input/glove.840B.300d.txt"
-embedding_path = "../vecs/numberbatch.txt"
+embedding_path = "../input/glove.840B.300d.txt"
+# embedding_path = "../vecs/numberbatch.txt"
 embed_size = 300
 max_features = 100000
 max_len = 150
@@ -75,6 +75,9 @@ y = train[list_classes].values
 train["comment_text"].fillna("no comment")
 test["comment_text"].fillna("no comment")
 X_train, X_valid, Y_train, Y_valid = train_test_split(train, y, test_size = 0.1)
+
+
+
 
 
 # In[5]:
@@ -154,7 +157,7 @@ def build_model(lr = 0.0, lr_d = 0.0, units = 0, dr = 0.0):
 
 model = build_model(lr = 1e-3, lr_d = 0, units = 128, dr = 0.2)
 pred = model.predict(test, batch_size = 1024, verbose = 2)
-pred = np.around(pred, decimals=4)
+pred = np.around(pred, decimals=8)
 
 # In[ ]:
 
