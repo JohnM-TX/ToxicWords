@@ -21,11 +21,15 @@ attention with fasttext and textacy - sang han - 0.
 VERIFIED:::
 
 biggrucnn.py, glove.840b, 0.9839
-biggrucnn.py, numberbatch_ml, ??
-biggrucnnmorefeats.py,  xxxx, ??
-biggrucnnbigbatch.py,  xxxx, ??
+biggrucnn.py, numberbatch_ml, 0.500 weird
+biggrucnntrainable.py, glove, 0.9783
 
-biggrucnntrainable.py, xxxxx, ??
+biggrucnn.py, fasttext, ??
+
+
+biggrucnnmorefeats.py,  glove, ??
+biggrucnnbigbatch.py,  glove, ??
+
 biggrucnntrainprep.py, xxxx, ??
 
 
