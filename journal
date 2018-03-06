@@ -23,14 +23,18 @@ VERIFIED:::
 biggrucnn.py, glove.840b, 0.9839
 biggrucnn.py, numberbatch_ml, 0.500 weird
 biggrucnntrainable.py, glove, 0.9783
+biggrucnnmorefeats.py,  glove, 0.9831
+biggrucnnbigbatch.py,  glove, 0.9834
+
+biggrucnnmorefeats.py,  fasttext, ???
+
+
 
 biggrucnn.py, fasttext, ??
 
 
-biggrucnnmorefeats.py,  glove, ??
-biggrucnnbigbatch.py,  glove, ??
-
 biggrucnntrainprep.py, xxxx, ??
+biggrucnnmarkovify.py, xxxx, ??
 
 
 
