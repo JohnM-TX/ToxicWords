@@ -29,14 +29,90 @@ from keras.optimizers import Adam, RMSprop
 from keras.callbacks import EarlyStopping, ModelCheckpoint, LearningRateScheduler
 from keras.callbacks import Callback
 
+import markovify as mk
 
-# In[2]:
 
 
 np.random.seed(32)
-os.environ["OMP_NUM_THREADS"] = "4"
+os.environ['OMP_NUM_THREADS'] = "4"
+
+train0 = pd.read_csv("../input/train.csv")
+test = pd.read_csv("../input/test.csv")
 
 
+class_names = list(train0)[-6:]
+
+
+train0['comment_text'].fillna("no comment")
+test['comment_text'].fillna("no comment")
+
+multarray = np.array([100000, 10000, 1000, 100, 10, 1])
+train0['true_class'] = np.sum(train0.iloc[:, 2:8].values * multarray, axis=1)
+train0[5:7]
+
+aug1 = train0[train0['true_class'] == 101110] 
+count1 = 2500
+
+aug2 = train0[train0['true_class'] == 111011]
+count2 = 3500
+
+aug_list = aug1['comment_text'].tolist() 
+nchar = int(aug1['comment_text'].str.len().median())
+
+mkv_text = []
+text_model = mk.Text(aug_list)
+for i in range(count1):
+        new = text_model.make_short_sentence(nchar)
+        mkv_text.append(new)
+
+aug_text = pd.Series(mkv_text, name='comment_text')    
+
+ys = np.array([[1,0,1,1,1,0],]*count1)
+
+aug_ys = pd.DataFrame(ys, columns=class_names)    
+aug_ys.head()
+    
+augdf = aug_ys.join(aug_text)
+#     return augdf
+    
+# train_class = np.ones(count)
+# train_target = np.append(train_base_tgt, train_class)
+    
+
+aug1df = augdf
+    
+
+    
+    
+aug_list = aug2['comment_text'].tolist() 
+nchar = int(aug2['comment_text'].str.len().median())
+
+mkv_text = []
+text_model = mk.Text(aug_list)
+for i in range(count2):
+        new = text_model.make_short_sentence(nchar)
+        mkv_text.append(new)
+
+aug_text = pd.Series(mkv_text, name='comment_text')    
+
+ys = np.array([[1,1,1,0,1,1],]*count2)
+
+aug_ys = pd.DataFrame(ys, columns=class_names)    
+aug_ys.head()
+    
+augdf = aug_ys.join(aug_text)
+
+aug2df = augdf
+
+
+train0.drop(columns=['id', 'true_class'], inplace=True)
+train = pd.concat([train0, aug1df, aug2df], axis=0, join='outer', ignore_index=True,)
+
+
+
+y = train[class_names].values
+
+X_train, X_valid, Y_train, Y_valid = train_test_split(train, y, test_size = 0.1)
 
 
 class RocAucEvaluation(Callback):
@@ -53,11 +129,6 @@ class RocAucEvaluation(Callback):
             print("\n ROC-AUC - epoch: {:d} - score: {:.6f}".format(epoch+1, score))
 
 
-# In[3]:
-
-
-train = pd.read_csv("../input/train.csv")
-test = pd.read_csv("../input/test.csv")
 
 # embedding_path = "../input/fasttext-crawl-300d-2m/crawl-300d-2M.vec"
 embedding_path = "../vecs/glove.840B.300d.txt"
@@ -66,18 +137,6 @@ embedding_path = "../vecs/glove.840B.300d.txt"
 embed_size = 300
 max_features = 100000 # 100000
 max_len = 150 # 100, 150
-
-
-# In[4]:
-
-
-list_classes = list(train)[-6:]
-y = train[list_classes].values
-train["comment_text"].fillna("no comment")
-test["comment_text"].fillna("no comment")
-X_train, X_valid, Y_train, Y_valid = train_test_split(train, y, test_size = 0.1)
-
-
 
 
 
@@ -149,7 +208,7 @@ def build_model(lr = 0.0, lr_d = 0.0, units = 0, dr = 0.0):
     x = Dense(6, activation = "sigmoid")(x)
     model = Model(inputs = inp, outputs = x)
     model.compile(loss = "binary_crossentropy", optimizer = Adam(lr = lr, decay = lr_d), metrics = ["accuracy"])
-    history = model.fit(X_train, Y_train, batch_size = batchsz, epochs = 4, validation_data = (X_valid, Y_valid), 
+    history = model.fit(X_train, Y_train, batch_size = batchsz, epochs = 5, validation_data = (X_valid, Y_valid), 
                         verbose = 1, callbacks = [ra_val, check_point, early_stop])
     model = load_model(file_path)
     return model
@@ -168,8 +227,8 @@ pred = np.around(pred, decimals=8)
 
 
 submission = pd.read_csv("../input/sample_submission.csv")
-submission[list_classes] = (pred)
-submission.to_csv("../subs/sub_bigrucnn.csv", index = False)
+submission[class_names] = (pred)
+submission.to_csv("../subs/sub_bigrucnn_mk_5eps.csv", index = False)
 print("[{}] Completed!".format(time.time() - start_time))
 
 
