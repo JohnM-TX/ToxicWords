@@ -39,6 +39,10 @@ parameter changes, 0.98902, 0.9841
 bigrucnn3 added dropout - val 0.9843, LB 0.9843
 
 
+latestv4_nocvyet, val 0.98435, LB 0.9848 !!!!!!!
+bi_lstm_cv.py, 
+
+
 ##########################
 
 

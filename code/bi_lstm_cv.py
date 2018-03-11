@@ -2,13 +2,10 @@
 import numpy as np
 import pandas as pd
 
-# import string
-# import re
-
 from datetime import datetime
 
 from sklearn.metrics import roc_auc_score
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedKFold
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras import layers as lrs
 from keras.preprocessing import text, sequence
@@ -24,11 +21,8 @@ test = pd.read_csv("../input/test.csv", nrows=None)
 
 # set vars
 max_features = 100000
-maxlength = 150         #150
 embed_size = 300
-
-embedding_file = "../vecs/glove.840B.300d.txt"     #####
-sub_file = "../input/sample_submission.csv"
+max_length = 150         #150
 
 
 # preprocess
@@ -54,14 +48,17 @@ toker.fit_on_texts(list(x_train0)+list(x_test0))
 x_train = toker.texts_to_sequences(x_train0)
 x_test = toker.texts_to_sequences(x_test0)
 
-x_train = sequence.pad_sequences(x_train, maxlen=maxlength)
-x_test = sequence.pad_sequences(x_test, maxlen=maxlength)
+x_train = sequence.pad_sequences(x_train, maxlen=max_length)
+x_test = sequence.pad_sequences(x_test, maxlen=max_length)
 
 
 # prepare word vectors/matrix
 print('vectorizing')
 
 embeddings_index = {}
+embedding_file = "../vecs/crawl-300d-2M.vec" 
+# embedding_file = "../vecs/glove.840B.300d.txt" 
+
 with open(embedding_file, encoding='utf8') as f:
     for line in f:
         values = line.rstrip().rsplit(' ')
@@ -81,24 +78,20 @@ for word, i in word_idx.items():
         embedding_matrix[i] = embedding_vector  # words not found will be all-zeros
 
 
-
-
 # model
 print('modeling')
 
 def create_model():
     model = Sequential()
     model.add(lrs.Embedding(max_features, embed_size, weights=[embedding_matrix],trainable = False))
-    model.add(lrs.SpatialDropout1D(0.2)) # 0.2
-    model.add(lrs.Bidirectional(lrs.LSTM(128, return_sequences=True, dropout=0.0, recurrent_dropout=0.0), # 128 0,0 
-        merge_mode='concat'))          # 'concat' 
-    model.add(lrs.Conv1D(64, kernel_size = 2, padding = "valid", kernel_initializer = "glorot_uniform"))
+    model.add(lrs.SpatialDropout1D(0.2)) 
+    model.add(lrs.Bidirectional(lrs.LSTM(128, return_sequences=True, dropout=0.0, recurrent_dropout=0.0), 
+        merge_mode='concat')) 
+    model.add(lrs.Conv1D(64, kernel_size=2, padding='valid', kernel_initializer='glorot_uniform'))
     model.add(lrs.GlobalMaxPooling1D())    # avg pooling
-    model.add(lrs.Dense(6, activation="sigmoid"))
+    model.add(lrs.Dense(6, activation='sigmoid'))
     model.compile(loss='binary_crossentropy',optimizer=Nadam(lr=0.001),metrics=['accuracy']) # default 0.002
-    model.summary()
     return model
-
 
 class RocAucEvaluation(Callback):
     def __init__(self, validation_data=(), interval=1):
@@ -110,42 +103,40 @@ class RocAucEvaluation(Callback):
         if epoch % self.interval == 0:
             y_pred = self.model.predict(self.x_val, verbose=0)
             score = roc_auc_score(self.y_val, y_pred)
-            print("\n ROC_AUC - epoch {:d} - score {:.6f}".format(epoch+1, score))
+            print("\n ROC_AUC - epoch {:d} - score {:.6f}".format(epoch, score))
+        return score
 
 def get_calls(x_val, y_val, weights):
     ra_val = RocAucEvaluation(validation_data=(x_val, y_val), interval=1)
-    checkpoint = ModelCheckpoint(weights, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-    early = EarlyStopping(monitor="val_acc", mode="max", patience=5)
+    checkpoint = ModelCheckpoint(weights, monitor='val_acc', verbose=1, save_best_only=True, mode='max')  # val_acc
+    early = EarlyStopping(monitor='val_acc', mode='max', patience=5) # val_acc
     callbacks_list = [ra_val, checkpoint, early]
     return callbacks_list
 
 def fit_model(x_tra, y_tra, x_val, y_val, weights):
     clbks = get_calls(x_val, y_val, weights)
     clf = create_model()
-    clf.fit(x_tra, y_tra, batch_size=128, epochs=5, validation_data=(x_val, y_val), 
+    clf.fit(x_tra, y_tra, batch_size=128, epochs=5, validation_data=(x_val, y_val),
             callbacks=clbks, verbose=1)
     clf.load_weights(weights)
     return clf
-    
-    
-
-# make all the k folds
-# for indices in kfolds:
-    # xt, xv, yt, yv = t.......
-    # save the best weights file
-    # fit and predict
-    # preds[i]
-
-xt, xv, yt, yv = train_test_split(x_train, y_train, train_size=0.8, random_state=233)
-weights_file = "./weights/weights_best.hdf5"
-firstclf = fit_model(xt, yt, xv, yv, weights_file)
-
-# average all best weights
 
 
-test_preds = firstclf.predict(x_test, batch_size=1024, verbose=1)
+# do it
+splits = 5
+preds_list = []
+skf = StratifiedKFold(n_splits=splits, shuffle=True)
+for i, (train_index, val_index) in enumerate(skf.split(np.zeros(train.shape[0]), y_multi)):
+    print ("\n\n\n Training on fold {} \n\n\n".format(str(i+1)))
+    xt, xv = x_train[train_index], x_train[val_index]
+    yt, yv = y_train[train_index], y_train[val_index]
+    weights_file = "./weights/weights_best_{}.hdf5".format(str(i))
+    clfr = fit_model(xt, yt, xv, yv, weights_file)
+    preds_list.append(clfr.predict(x_test, batch_size=1024, verbose=1))
 
-submission = pd.read_csv(sub_file)
+test_preds = sum(preds_list)/len(preds_list)
+
+submission = pd.read_csv("../input/sample_submission.csv")
 submission[class_names] = (test_preds)
 submission.to_csv("../subs/sub_bigrulstm04_{}.csv".format(datetime.now().strftime('%d_%H_%M')), index = False)
 
