@@ -288,7 +288,7 @@ for class_name in class_names:
                       train_set=trn_lgbset,
                       num_boost_round=int(lgb_round_dict[class_name] / folds.n_splits)
                  )
-    print(num_boost_round, model.best_iteration)
+    # print(num_boost_round, model.best_iteration)
     submission[class_name] = model.predict(csr_sub, num_iteration=model.best_iteration)
 submission.to_csv("../subs/lvl0_lgbm_clean_sub.csv", index=False, float_format="%.8f")
 
