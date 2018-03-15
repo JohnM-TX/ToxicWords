@@ -512,18 +512,6 @@ print('number of null word embeddings: %d' % np.sum(np.sum(embedding_matrix, axi
 
     
 
-
-col=['count_sent','count_unique_word','count_letters',"count_punctuations","count_words_upper","count_words_title","count_stopwords","mean_word_len",'word_unique_percent','punct_percent',"dirty_word_freq_count"]#"dirty_word_similarity"]
-
-
-
-df=df.replace([np.inf, -np.inf], np.nan)
-
-print("....start....normalize")
-print(df.isnull().sum())
-
-
-
 print("complete preprocess")
 
 
@@ -730,3 +718,4 @@ def get_model():
 batch_size = 640
 
 #total average roc_auc: 0.9875268030202132
+#lb score:0.9853
