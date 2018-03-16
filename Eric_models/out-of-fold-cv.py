@@ -38,6 +38,7 @@ for i in range(1,int(K_fold+1)):
         
         
     print("")
+    #this part can also change to other model, logreg, svc, lgbm,....etc.
     file_path="weights_base_5_fold_CNN.hdf5"
     checkpoint = ModelCheckpoint(file_path, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
     early = EarlyStopping(monitor="val_loss", mode="min",verbose=1, patience=5)
