@@ -44,7 +44,7 @@ for i in range(1,int(K_fold+1)):
     early = EarlyStopping(monitor="val_loss", mode="min",verbose=1, patience=5)
     callbacks_list = [early,checkpoint]
     model = get_model()
-    seed(42)   #original is 1, change to 42 
+    seed(1)   
     history=model.fit(c_train_X,c_train_y, batch_size=batch_size, epochs=epochs, 
                       validation_data=(c_val_X, c_val_y), callbacks=callbacks_list) #[c_train_X, c_train_X_gram]
     #history=model.fit({'main_input':c_train_X, 'aux_input': c_train_X_twitter},c_train_y, batch_size=batch_size, epochs=epochs, 
