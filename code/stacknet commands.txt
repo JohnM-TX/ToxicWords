@@ -1,6 +1,7 @@
 
 Command line:
 
+<<<<<<< HEAD
 java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparsetoxic.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stacktoxic.model' pred_file='../stacks/out/stack_predstoxic.csv' threads=1 metric=auc verbose=true seed=42 folds=5
 
 
@@ -18,6 +19,9 @@ java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classi
 
 
 java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparseidentity_hate.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stackidentity_hate.model' pred_file='../stacks/out/stack_predsidentity_hate.csv' threads=1 metric=auc verbose=true seed=42 folds=5
+=======
+java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification sparse=true has_head=false train_file='trainsparse.txt' params='params1.txt' threads=3 metric=auc verbose=true seed=42 folds=8
+>>>>>>> b1f43b936ecc0616655b9338379e2e20e231580f
 
 
 
