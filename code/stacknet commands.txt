@@ -1,7 +1,23 @@
 
 Command line:
 
-java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification sparse=true has_head=false train_file='trainsparse.txt' params='params1.txt' threads=3 metric=auc verbose=true seed=42 folds=8
+java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparsetoxic.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stacktoxic.model' pred_file='../stacks/out/stack_predstoxic.csv' threads=1 metric=auc verbose=true seed=42 folds=5
+
+
+
+java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparsesevere_toxic.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stacksevere_toxic.model' pred_file='../stacks/out/stack_predssevere_toxic.csv' threads=1 metric=auc verbose=true seed=42 folds=5
+
+
+java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparseobscene.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stackobscene.model' pred_file='../stacks/out/stack_predsobscene.csv' threads=1 metric=auc verbose=true seed=42 folds=5
+
+
+java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparsethreat.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stackthreat.model' pred_file='../stacks/out/stack_predsthreat.csv' threads=1 metric=auc verbose=true seed=42 folds=5
+
+
+java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparseinsult.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stackinsult.model' pred_file='../stacks/out/stack_predsinsult.csv' threads=1 metric=auc verbose=true seed=42 folds=5
+
+
+java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparseidentity_hate.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stackidentity_hate.model' pred_file='../stacks/out/stack_predsidentity_hate.csv' threads=1 metric=auc verbose=true seed=42 folds=5
 
 
 
