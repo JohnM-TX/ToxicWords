@@ -671,7 +671,7 @@ def get_model():
     model = Model(inputs=main_input, outputs=x)
     
     model.compile(loss='binary_crossentropy',
-                  optimizer=nadam,
+                  optimizer=
                   metrics=['accuracy',f1_score,auc])
     print(model.summary())
     return model
