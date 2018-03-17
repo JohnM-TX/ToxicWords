@@ -3,7 +3,40 @@ K_fold=split
 pred_val_accumulator=test_accumulator=None
 accumulator=[]
 
-#change according to the John's version
+#change according to the John's version, but according to the wanring message, I do anthor version
+#My modified version
+from sklearn.model_selection import KFold
+
+kf = KFold(n_splits=10,shuffle=True,random_state=42)
+
+for train_index, val_index in kf.split(np.zeros(train.shape[0])):
+    c_train_x=X_tr[train_index]
+    c_train_y=y_tr[train_index]
+    c_val_X = X_tr[val_index]
+    c_val_y = y_tr[val_index]
+     
+    
+    
+#John's version
+class_names = list(train)[-6:]
+multarray = np.array([100000, 10000, 1000, 100, 10, 1])
+y_multi = np.sum(train[class_names].values * multarray, axis=1)
+
+print(class_names)
+
+print(y_multi)
+
+
+from sklearn.model_selection import StratifiedKFold
+splits = 10
+skf = StratifiedKFold(n_splits=splits, shuffle=True, random_state=42)
+
+train_ids = [] 
+val_ids = []
+for i, (train_idx, val_idx) in enumerate(skf.split(np.zeros(train.shape[0]), y_multi)):
+    train_ids.append(train.loc[train_idx, 'id'])
+    val_ids.append(train.loc[val_idx, 'id'])
+
 for i in range(splits):
     print("=================================")
     print("Start on: "+str(i)+" fold")
@@ -11,6 +44,13 @@ for i in range(splits):
     c_train_y = y_tr[train.id.isin(train_ids[i])]
     c_val_X = X_tr[train.id.isin(val_ids[i])]
     c_val_y = y_tr[train.id.isin(val_ids[i])]
+    
+    
+    
+    
+    
+    
+    
         
         
     print("")
