@@ -17,7 +17,7 @@ for train_index, val_index in kf.split(np.zeros(train.shape[0])):
      
     
     
-#John's version (still in the competition for training, change to my own K-fold version after 3/17)
+#John's version ( in the competition for training)
 class_names = list(train)[-6:]
 multarray = np.array([100000, 10000, 1000, 100, 10, 1])
 y_multi = np.sum(train[class_names].values * multarray, axis=1)
