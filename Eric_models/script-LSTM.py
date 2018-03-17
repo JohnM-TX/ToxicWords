@@ -663,22 +663,13 @@ def get_model():
     embedded_sequences= Embedding(max_features, embed_size,weights=[embedding_matrix],trainable=False)(main_input)
    
     
-    hidden_dim=60 
-    
-    x=SpatialDropout1D(0.21)(embedded_sequences)                    #0.1
-    x_lstm_1 = Bidirectional(CuDNNLSTM(hidden_dim,recurrent_regularizer=regularizers.l2(1e-8),return_sequences=True))(x)
-    x_lstm_2 = Bidirectional(CuDNNLSTM(hidden_dim,recurrent_regularizer=regularizers.l2(1e-8),return_sequences=True))(x_lstm_1)
-   regularizer=regularizers.l2(1e-8),return_sequences=True))(x_gru_1)
-    x_com = concatenate([x_lstm_1,x_lstm_2])
-    x_att_1 = AttentionWeightedAverage()(x_com)
-    x_att_1= Dropout(0.225)(x_att_1)
-    x= Dense(6, activation="sigmoid",kernel_regularizer=regularizers.l2(1e-8))(x_att_1)
+   
    
     
     
     
     model = Model(inputs=main_input, outputs=x)
-    nadam=Nadam(lr=0.00125, beta_1=0.9, beta_2=0.999, epsilon=None, schedule_decay=0.0035)
+    
     model.compile(loss='binary_crossentropy',
                   optimizer=nadam,
                   metrics=['accuracy',f1_score,auc])
