@@ -1,40 +1,16 @@
 from sklearn.metrics import roc_auc_score
-K_fold=10
+K_fold=split
 pred_val_accumulator=test_accumulator=None
 accumulator=[]
-for i in range(1,int(K_fold+1)):
+
+#change according to the John's version
+for i in range(splits):
     print("=================================")
     print("Start on: "+str(i)+" fold")
-    length=int(len(X_tr)/K_fold)
-    if((len(X_tr)/K_fold)==length):
-        c_val_X=X_tr[length*(i-1):length*i]
-        c_val_y=y_tr[length*(i-1):length*i]
-    else:
-        c_val_X=X_tr[length*(i-1):length*i]
-        c_val_y=y_tr[length*(i-1):length*i]
-        if(i==K_fold):
-            c_val_X=X_tr[length*(i-1):]
-            c_val_y=y_tr[length*(i-1):]
-    
-    indexOne=length*(i-1)
-    indexTwo=length*(i)
-    
-    if(i==1):
-        c_train_X=X_tr[indexTwo:]
-        c_train_y=y_tr[indexTwo:]
-        
-    elif(i==K_fold):
-        c_train_X=X_tr[:indexOne]
-        c_train_y=y_tr[:indexOne]
-    else:
-        c_train_XOne=X_tr[:indexOne]
-        c_train_yOne=y_tr[:indexOne]
-        c_train_XTwo=X_tr[indexTwo:]
-        c_train_yTwo=y_tr[indexTwo:]
-        
-        c_train_X=np.vstack((c_train_XOne,c_train_XTwo))
-        c_train_y=np.vstack((c_train_yOne,c_train_yTwo))
-        
+    c_train_X = X_tr[train.id.isin(train_ids[i])]
+    c_train_y = y_tr[train.id.isin(train_ids[i])]
+    c_val_X = X_tr[train.id.isin(val_ids[i])]
+    c_val_y = y_tr[train.id.isin(val_ids[i])]
         
         
     print("")
