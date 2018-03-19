@@ -1,33 +1,20 @@
 
-Command line:
 
-<<<<<<< HEAD
-java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparsetoxic.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stacktoxic.model' pred_file='../stacks/out/stack_predstoxic.csv' threads=1 metric=auc verbose=true seed=42 folds=5
+# train and predict
 
+java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparsetoxic.txt' params='params3.txt' model='../stacks/toxic.model' test_file='../stacks/full/testsparse.txt'  test_target=true pred_file='../stacks/predsvtoxic.csv' output_name='../stacks/jim' indices_name='fold' include_target=True threads=1 metric=auc verbose=true seed=42 folds=8
 
-
-java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparsesevere_toxic.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stacksevere_toxic.model' pred_file='../stacks/out/stack_predssevere_toxic.csv' threads=1 metric=auc verbose=true seed=42 folds=5
+java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparsesevere_toxic.txt' params='params3.txt' model='../stacks/severe_toxic.model' test_file='../stacks/full/testsparse.txt'  test_target=true pred_file='../stacks/predsvsevere_toxic.csv' output_name='../stacks/jim' indices_name='fold' threads=1 metric=auc verbose=true seed=42 folds=8
 
 
-java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparseobscene.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stackobscene.model' pred_file='../stacks/out/stack_predsobscene.csv' threads=1 metric=auc verbose=true seed=42 folds=5
+java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparseobscene.txt' params='params3.txt' model='../stacks/obscene.model' test_file='../stacks/full/testsparse.txt'  test_target=true pred_file='../stacks/predsvobscene.csv' output_name='../stacks/jim' indices_name='fold' threads=1 metric=auc verbose=true seed=42 folds=8
 
 
-java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparsethreat.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stackthreat.model' pred_file='../stacks/out/stack_predsthreat.csv' threads=1 metric=auc verbose=true seed=42 folds=5
+java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparsethreat.txt' params='params3.txt' model='../stacks/threat.model' test_file='../stacks/full/testsparse.txt'  test_target=true pred_file='../stacks/predsvthreat.csv' output_name='../stacks/jim' indices_name='fold' threads=1 metric=auc verbose=true seed=42 folds=8
 
 
-java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparseinsult.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stackinsult.model' pred_file='../stacks/out/stack_predsinsult.csv' threads=1 metric=auc verbose=true seed=42 folds=5
+java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparseinsult.txt' params='params3.txt' model='../stacks/insult.model' test_file='../stacks/full/testsparse.txt'  test_target=true pred_file='../stacks/predsvinsult.csv' output_name='../stacks/jim' indices_name='fold' threads=1 metric=auc verbose=true seed=42 folds=8
 
 
-java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparseidentity_hate.txt'  test_file='../stacks/full/testsparse.txt'  test_target=true params='params2.txt' model='../stacks/stackidentity_hate.model' pred_file='../stacks/out/stack_predsidentity_hate.csv' threads=1 metric=auc verbose=true seed=42 folds=5
-=======
-java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification sparse=true has_head=false train_file='trainsparse.txt' params='params1.txt' threads=3 metric=auc verbose=true seed=42 folds=8
->>>>>>> b1f43b936ecc0616655b9338379e2e20e231580f
+java -jar /media/mjp914/Fastdata/Kaggles/StackNet/StackNet.jar train task=classification  sparse=true has_head=false train_file='../stacks/full/trainsparseidentity_hate.txt' params='params3.txt' model='../stacks/identity_hate.model' test_file='../stacks/full/testsparse.txt'  test_target=true pred_file='../stacks/predsvidentity_hate.csv' output_name='../stacks/jim' indices_name='fold' threads=1 metric=auc verbose=true seed=42 folds=8
 
-
-
-
-Params: (see params files)
-LogisticRegression Type:Liblinear C:0.8 threads:1 usescale:True maxim_Iteration:100 seed:1 verbose:true
-RandomForestClassifier estimators:100 threads:1 rounding:3 cut_off_subsample:0.15 max_depth:7 max_features:0.7 min_leaf:3.0 min_split:5.0 Objective:ENTROPY row_subsample:0.95 seed:1 verbose:true
-
-RandomForestClassifier estimators:300 threads:3 rounding:3.0 max_depth:12 max_features:0.4 min_leaf:3.0 min_split:5.0 Objective:ENTROPY row_subsample:0.9 seed:1 verbose:true

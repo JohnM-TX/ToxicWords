@@ -1,10 +1,4 @@
 
-# coding: utf-8
-
-# In[1]:
-
-
-# %load lgbm_olivier2.py
 import re
 import string
 import os
@@ -24,9 +18,6 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import KFold
 from sklearn.metrics import roc_auc_score
-
-
-# In[2]:
 
 
 
@@ -197,10 +188,6 @@ csr_sub = hstack([test_char_features,
 
 
 
-# In[ ]:
-
-
-
 submission = pd.DataFrame.from_dict({'id': test['id']})
 
 drop_f = [f_ for f_ in train if f_ not in ["id"] + class_names]
@@ -229,7 +216,7 @@ params = {
         "num_threads": 4,
         "is_unbalance": "true"   # default
         }
-lgb_rounds = 2500    #####
+lgb_rounds = 2500    ##### 2500
 
 for class_name in class_names:
     print("Class %s scores : " % class_name)
@@ -260,22 +247,11 @@ for class_name in class_names:
     train[class_name + "_oof"] = class_pred
 
 # Save OOF predictions
-train[["id"] + class_names + [f + "_oof" for f in class_names]].to_csv("lvl0_lgbm_clean_oof.csv",
+train[["id"] + class_names + [f + "_oof" for f in class_names]].to_csv("../subs/lvl0_lgbm_clean_oof.csv",
                                                             index=False, float_format="%.8f")
    
 
-
-# In[ ]:
-
-
-
-
 print('Total CV score is {}'.format(np.mean(scores)))
-
-
-# In[ ]:
-
-
 
 print("Predicting probabilities")
 

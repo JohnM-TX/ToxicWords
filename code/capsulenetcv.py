@@ -27,7 +27,7 @@ multarray = np.array([100000, 10000, 1000, 100, 10, 1])
 y_multi = np.sum(train[class_names].values * multarray, axis=1)
 
 # set splits
-splits = 8
+splits = 3
 skf = StratifiedKFold(n_splits=splits, shuffle=True, random_state=42)
 
 # produce two lists of ids. each list has n items where n is the 
@@ -40,11 +40,11 @@ for i, (train_idx, val_idx) in enumerate(skf.split(np.zeros(train.shape[0]), y_m
 
 
 max_features=100000
-maxlen=300
-embed_size=256
+maxlen=256
+embed_size=300
 
-EMBEDDING_FILE = '../vecs/wiki.en.vec'
-
+EMBEDDING_FILE = '../vecs/crawl-300d-2M.vec'
+print('embedding')
 embeddings_index = {}
 with open(EMBEDDING_FILE,encoding='utf8') as f:
     for line in f:
@@ -79,7 +79,7 @@ dropout_p = 0.25
 rate_drop_dense = 0.28
 
 batch_size = 256
-epochs_num = 3
+epochs_num = 1
 
 def squash(x, axis=-1):
     # s_squared_norm is really small
@@ -189,8 +189,9 @@ def get_model():
 
 # example use
 subpreds = pd.DataFrame()
-
+print('beginning to train')
 for i in range(splits):
+    print(i)
     train = train[train.id.isin(train_ids[i])]
     test = train[train.id.isin(val_ids[i])]
     
@@ -229,6 +230,7 @@ for i in range(splits):
     
     y_pred = model.predict(x_test, batch_size=1024, verbose=1)
     
+    print(val_ids[i])
     subpart = sub[sub.id.isin(val_ids[i])]
     subpart[class_names] = y_pred
     subpreds = pd.concat([subpreds, subpart], copy=False)

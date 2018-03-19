@@ -1,0 +1,6 @@
+LogisticRegression Type:SGD C:0.00001  threads:1 learn_rate:0.1 usescale:True maxim_Iteration:20 seed:1 verbose:false
+LSVC Type:FTRL C:0.00001 l1C:1.0 RegularizationType:L2 threads:1 learn_rate:0.1 usescale:True maxim_Iteration:20 seed:1 verbose:true copy:false
+LogisticRegression Type:Liblinear C:1.0 RegularizationType:L1 threads:1 usescale:True maxim_Iteration:100 seed:1 verbose:false
+LSVC Type:Liblinear threads:1 usescale:True C:1.0 RegularizationType:L1 maxim_Iteration:100 seed:1 verbose:true copy:false
+
+RandomForestClassifier bootsrap:false max_tree_size:-1 cut_off_subsample:1.0 feature_subselection:1.0 rounding:20 estimators:100 offset:0.00001 max_depth:6 max_features:0.8 min_leaf:2.0 min_split:5.0 Objective:ENTROPY row_subsample:0.95 seed:1 threads:1 bags:1 verbose:true
