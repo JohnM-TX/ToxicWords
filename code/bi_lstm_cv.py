@@ -1,4 +1,11 @@
 
+# coding: utf-8
+
+# In[ ]:
+
+
+# %load bi_lstm_cv.py
+
 import numpy as np
 import pandas as pd
 
@@ -116,16 +123,21 @@ def get_calls(x_val, y_val, weights):
 def fit_model(x_tra, y_tra, x_val, y_val, weights):
     clbks = get_calls(x_val, y_val, weights)
     clf = create_model()
-    clf.fit(x_tra, y_tra, batch_size=128, epochs=1, validation_data=(x_val, y_val),     #######
+    clf.fit(x_tra, y_tra, batch_size=128, epochs=4, validation_data=(x_val, y_val),     #######
             callbacks=clbks, verbose=1)
     clf.load_weights(weights)
     return clf
 
 
+# In[ ]:
+
+
+
 # do it
-splits = 3                                         #$#####
+splits = 8                                         #$#####
 testpreds_list = []
 trainpreds_list = []
+valindex_list = []
 skf = StratifiedKFold(n_splits=splits, shuffle=True)
 for i, (train_index, val_index) in enumerate(skf.split(np.zeros(train.shape[0]), y_multi)):
     print ("\n\n\n Training on fold {} \n\n\n".format(str(i+1)))
@@ -135,11 +147,35 @@ for i, (train_index, val_index) in enumerate(skf.split(np.zeros(train.shape[0]),
     clfr = fit_model(xt, yt, xv, yv, weights_file)
     trainpreds_list.append(clfr.predict(xv, batch_size=1024, verbose=1))
     testpreds_list.append(clfr.predict(x_test, batch_size=1024, verbose=1))
+    valindex_list.append(val_index)
 train_preds = trainpreds_list
 test_preds = sum(testpreds_list)/len(testpreds_list)
 
+
+# In[ ]:
+
+
+val_indices = np.concatenate(valindex_list, axis=0)
+
+
+# In[ ]:
+
+
+trainpreds_all = np.concatenate(trainpreds_list, axis=0)
+
+
+# In[ ]:
+
+
+predstrain =  pd.DataFrame(data=trainpreds_all, index=val_indices, columns=class_names)
+predstrain.sort_index(inplace=True)
+
+
+# In[ ]:
+
+
 predfile =  pd.DataFrame.from_dict({'id': train['id']})
-predfile[class_names] = train_preds
+predfile[class_names] = predstrain
 predfile.to_csv("../ensembles/preds_bilstmft.csv", index = False)
 
 
@@ -147,5 +183,4 @@ predfile.to_csv("../ensembles/preds_bilstmft.csv", index = False)
 submission = pd.read_csv("../input/sample_submission.csv")
 submission[class_names] = (test_preds)
 submission.to_csv("../ensembles/test_bilstmft.csv", index = False)
-
 

@@ -29,7 +29,7 @@ test[COMMENT].fillna("unknown", inplace=True)
 re_tok = re.compile(f'([{string.punctuation}“”¨«»®´·º½¾¿¡§£₤‘’])')
 def tokenize(s): return re_tok.sub(r' \1 ', s).split()
 
-
+print('vectorizing')
 n = train.shape[0]
 vec = TfidfVectorizer(ngram_range=(1,2), tokenizer=tokenize,
                min_df=3, max_df=0.9, strip_accents='unicode', use_idf=1,
@@ -47,7 +47,7 @@ x = trn_term_doc
 test_x = test_term_doc
 
 
-# In[ ]:
+# In[7]:
 
 
 from sklearn.model_selection import cross_val_score, cross_val_predict
@@ -75,10 +75,10 @@ for i, j in enumerate(label_cols):
 
 
     
-train_preds.to_csv('../ensembles/preds_logreg_sanket.csv', index=False)
+train_preds.to_csv('../ensembles/preds_nb_svm.csv', index=False)
     
 submid = pd.DataFrame({'id': subm["id"]})
 submission = pd.concat([submid, pd.DataFrame(test_preds, columns = label_cols)], axis=1)
-submission.to_csv('../ensembles/test_logreg_sanket.csv', index=False)
+submission.to_csv('../ensembles/test_nb_svm.csv', index=False)
 
 
